@@ -53,3 +53,15 @@ Este documento detalha o processo de planejamento, desenvolvimento e os desafios
 
 * **Uso de variáveis de ambiente com `.env`**: Sim, o arquivo `.env` foi utilizado para gerenciar as credenciais do banco de dados (usuário, senha, nome do banco, senha do root), e o `docker-compose.yml` foi configurado para ler e utilizar essas variáveis, promovendo uma configuração mais segura e flexível.
 * **Scripts de build e inicialização automatizados**: Sim, os `Dockerfiles` para o backend e frontend contêm todos os passos necessários para construir as respectivas imagens e os comandos (`CMD`/`ENTRYPOINT`) para a inicialização dos containers. Adicionalmente, os arquivos `build.gradle` (para o backend) e `package.json` (para o frontend) contêm scripts que automatizam tarefas de build e desenvolvimento.
+* * **Logs organizados**: Os logs dos containers são gerenciados pelo Docker e podem ser facilmente acessados através do comando `docker-compose logs [nome_do_serviço]`. As aplicações foram configuradas para loggar informações relevantes no console (utilizando o sistema de logging padrão do Spring Boot para o backend e `console.log` no React para o frontend), facilitando o acompanhamento e a depuração.
+* **Testes automatizados**: Devido ao foco na implementação da arquitetura dockerizada e no cumprimento do prazo estabelecido, testes automatizados (unitários ou de integração) não foram o foco principal desta entrega. No entanto, são reconhecidos como um passo subsequente crucial para garantir a robustez e a qualidade contínua da aplicação.
+
+* ## 6. Imagens da Aplicação em Funcionamento:
+
+* ![Pasted Graphic](https://github.com/user-attachments/assets/17f3e132-24c8-41e6-9efb-6efa60d587dd)
+*![Pasted Graphic 1](https://github.com/user-attachments/assets/fb132e6c-b9cf-4b47-a35f-a503857aadf4)
+<img width="1502" alt="0 0 0 41" src="https://github.com/user-attachments/assets/80cf5592-1e98-4af1-a396-1240f5b97014" />
+<img width="1509" alt="Pasted Graphic 3" src="https://github.com/user-attachments/assets/d4187752-f961-4def-8344-d9fefc27b055" />
+
+
+
