@@ -1,0 +1,62 @@
+version: '3.8' # Especifica a versão do Docker Compose
+
+services:
+  # Serviço do Banco de Dados MySQL
+  db:
+    image: mysql:8.0 # Imagem oficial do MySQL versão 8.0
+    container_name: mysql_db_devops_p5
+    ports:
+      - "3306:3306" # Mapeia a porta 3306 do container para a porta 3306 do seu host
+    environment:
+      MYSQL_ROOT_PASSWORD: rootsecretpassword  # Senha para o usuário root do MySQL (troque por uma mais segura)
+      MYSQL_DATABASE: meubanco_db             # Nome do banco de dados que será criado automaticamente
+      MYSQL_USER: userdevops                  # Usuário que será criado para a aplicação
+      MYSQL_PASSWORD: passdevops              # Senha para o usuário da aplicação
+    volumes:
+      - mysql_data_devops_p5:/var/lib/mysql # Volume para persistir os dados do MySQL
+    networks:
+      - devops_network # Conecta este serviço à rede personalizada
+
+  # Serviço do Backend Spring Boot
+  backend:
+    build:
+      context: ./backend/backend # Caminho para a pasta que contém o Dockerfile do backend
+      dockerfile: Dockerfile
+    container_name: backend_app_devops_p5
+    ports:
+      - "8080:8080" # Mapeia a porta 8080 do container para a porta 8080 do seu host
+    depends_on:
+      - db # Garante que o serviço 'db' inicie antes do 'backend'
+    environment:
+      # Estas variáveis serão usadas pelo application.properties do Spring Boot
+      DB_HOST: db             # O nome do serviço do banco de dados no Docker Compose (o 'db' acima)
+      DB_PORT: 3306           # Porta do MySQL dentro da rede Docker
+      DB_NAME: meubanco_db    # Deve ser o MESMO nome definido em MYSQL_DATABASE para o serviço 'db'
+      DB_USER: userdevops     # Deve ser o MESMO nome definido em MYSQL_USER para o serviço 'db'
+      DB_PASSWORD: passdevops # Deve ser a MESMA senha definida em MYSQL_PASSWORD para o serviço 'db'
+      # Adicione outras variáveis de ambiente que seu backend possa precisar
+    networks:
+      - devops_network # Conecta este serviço à rede personalizada
+
+  # NOVO SERVIÇO: Frontend React
+  frontend:
+    build:
+      context: ./frontend/frontend # Caminho para a pasta que contém o Dockerfile do frontend
+      dockerfile: Dockerfile
+    container_name: frontend_app_devops_p5
+    ports:
+      - "3000:80" # Mapeia a porta 80 do container Nginx para a porta 3000 do seu host
+    depends_on:
+      - backend # Opcional, mas bom para indicar a dependência lógica
+    networks:
+      - devops_network
+
+# Define os volumes nomeados (para persistência)
+volumes:
+  mysql_data_devops_p5:
+
+# Define a rede personalizada (para comunicação entre containers)
+networks:
+  devops_network:
+    driver: bridge
+
